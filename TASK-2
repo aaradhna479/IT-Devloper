@@ -1,0 +1,53 @@
+def student_grade_calculator():
+    """Calculates the total marks, average percentage, and grade for a student."""
+    subject_marks = []
+    num_subjects = 0
+
+    print("Student Grade Calculator")
+    print("------------------------")
+
+    while True:
+        try:
+            marks = input(f"Enter marks obtained in subject {num_subjects + 1} (out of 100, or type 'done' to finish): ")
+            if marks.lower() == 'done':
+                break
+            marks = int(marks)
+            if 0 <= marks <= 100:
+                subject_marks.append(marks)
+                num_subjects += 1
+            else:
+                print("Marks should be between 0 and 100.")
+        except ValueError:
+            print("Invalid input. Please enter a number or 'done'.")
+
+    if num_subjects == 0:
+        print("No subject marks entered. Calculation cannot be performed.")
+        return
+
+    total_marks = sum(subject_marks)
+    average_percentage = total_marks / num_subjects
+
+    if average_percentage >= 90:
+        grade = "A+"
+    elif average_percentage >= 80:
+        grade = "A"
+    elif average_percentage >= 70:
+        grade = "B"
+    elif average_percentage >= 60:
+        grade = "C"
+    elif average_percentage >= 50:
+        grade = "D"
+    else:
+        grade = "F"
+
+    print("\n--- Results ---")
+    print(f"Total Marks: {total_marks}")
+    print(f"Average Percentage: {average_percentage:.2f}%")
+    print(f"Grade: {grade}")
+
+if __name__ == "__main__":
+    student_grade_calculator()
+
+
+
+TASK-2 STUDENT GRADE CALCULATOR
