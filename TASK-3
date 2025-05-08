@@ -1,0 +1,137 @@
+class BankAccount:
+    """Represents a user's bank account."""
+
+    def __init__(self, account_number, pin, balance=0.0):
+        """Initializes a BankAccount object."""
+        self.account_number = account_number
+        self.pin = pin
+        self.balance = balance
+
+    def deposit(self, amount):
+        """Deposits the given amount into the account."""
+        if amount > 0:
+            self.balance += amount
+            print(f"₹{amount:.2f} deposited successfully.")
+            self.check_balance()
+        else:
+            print("Invalid deposit amount. Please enter a positive value.")
+
+    def withdraw(self, amount):
+        """Withdraws the given amount from the account."""
+        if amount > 0:
+            if self.balance >= amount:
+                self.balance -= amount
+                print(f"₹{amount:.2f} withdrawn successfully.")
+                self.check_balance()
+            else:
+                print("Insufficient balance.")
+        else:
+            print("Invalid withdrawal amount. Please enter a positive value.")
+
+    def check_balance(self):
+        """Displays the current account balance."""
+        print(f"Current balance: ₹{self.balance:.2f}")
+
+    def get_account_number(self):
+        """Returns the account number."""
+        return self.account_number
+
+    def verify_pin(self, entered_pin):
+        """Verifies if the entered PIN matches the account PIN."""
+        return self.pin == entered_pin
+
+
+class ATM:
+    """Represents an ATM machine."""
+
+    def __init__(self):
+        """Initializes an ATM object with no accounts."""
+        self.accounts = {}  # Dictionary to store account number and BankAccount object
+
+    def add_account(self, account):
+        """Adds a bank account to the ATM's system."""
+        if account.get_account_number() not in self.accounts:
+            self.accounts[account.get_account_number()] = account
+            print(f"Account {account.get_account_number()} added to the ATM.")
+        else:
+            print(f"Account {account.get_account_number()} already exists.")
+
+    def authenticate_user(self):
+        """Authenticates the user by asking for account number and PIN."""
+        account_number = input("Enter your account number: ")
+        if account_number in self.accounts:
+            account = self.accounts[account_number]
+            attempts = 3
+            while attempts > 0:
+                pin = input("Enter your PIN: ")
+                if account.verify_pin(pin):
+                    print("Authentication successful.")
+                    return account
+                else:
+                    attempts -= 1
+                    print(f"Incorrect PIN. You have {attempts} attempts remaining.")
+            print("Too many incorrect PIN attempts. Account locked.")
+            return None
+        else:
+            print("Invalid account number.")
+            return None
+
+    def display_menu(self):
+        """Displays the ATM menu options."""
+        print("\n--- ATM Menu ---")
+        print("1. Withdraw")
+        print("2. Deposit")
+        print("3. Check Balance")
+        print("4. Exit")
+        print("------------------")
+
+    def run(self):
+        """Runs the ATM interface."""
+        print("Welcome to the ATM!")
+
+        user_account = self.authenticate_user()
+        if user_account:
+            while True:
+                self.display_menu()
+                choice = input("Enter your choice (1-4): ")
+
+                if choice == '1':
+                    try:
+                        amount = float(input("Enter the amount to withdraw: ₹"))
+                        user_account.withdraw(amount)
+                    except ValueError:
+                        print("Invalid input. Please enter a valid amount.")
+                elif choice == '2':
+                    try:
+                        amount = float(input("Enter the amount to deposit: ₹"))
+                        user_account.deposit(amount)
+                    except ValueError:
+                        print("Invalid input. Please enter a valid amount.")
+                elif choice == '3':
+                    user_account.check_balance()
+                elif choice == '4':
+                    print("Thank you for using the ATM!")
+                    break
+                else:
+                    print("Invalid choice. Please enter a number between 1 and 4.")
+        else:
+            print("Authentication failed. Cannot proceed.")
+
+
+if __name__ == "__main__":
+    # Create some bank accounts
+    account1 = BankAccount("123456", "1234", 1000.50)
+    account2 = BankAccount("789012", "5678", 500.00)
+
+    # Create an ATM instance
+    atm = ATM()
+
+    # Add the accounts to the ATM
+    atm.add_account(account1)
+    atm.add_account(account2)
+
+    # Run the ATM interface
+    atm.run()
+
+
+TASK-3 ATM INTERFACE
